@@ -5,10 +5,6 @@ import { ConfigService } from './config';
 export class AppService {
   constructor(private config: ConfigService) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   root(): string {
     return this.config.get('APP_URL');
   }

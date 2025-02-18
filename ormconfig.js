@@ -17,8 +17,8 @@ export const port = DATABASE_PORT;
 export const username = POSTGRES_USER;
 export const password = POSTGRES_PASSWORD;
 export const database = POSTGRES_DB;
-export const migrations = [__dirname + '/src/database/migrations/*{.ts,.js}'];
-export const entities = [__dirname + '/src/**/*.entity.{ts,js}'];
+export const migrations = ['/src/database/migrations/*{.ts,.js}'];
+export const entities = ['/src/**/*.entity.{ts,js}'];
 export const cli = {
   migrationsDir: 'src/database/migrations',
 };

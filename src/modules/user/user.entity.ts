@@ -1,26 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { BaseEntity } from 'shared/base/baseEntity';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
+@Entity({ name: 'users' })
+export class User extends BaseEntity {
+  @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ unique: true, nullable: false })
   phone: string;
 
-  @Column()
+  @Column({ unique: true, nullable: false })
   email: string;
 
-  @Column()
+  @Column({ select: false, nullable: false })
   password: string;
 
-  @Column()
+  @Column({ select: false, nullable: false })
   salt: string;
+
+  @Column({ default: false, nullable: false })
+  isAdmin: boolean;
 }
-
-//EXCEPTION FILTERS folder exceptions app.use exeption filters useGlobalFilters 
-
-//репозитроии посмотерть и импортировтаь вместо имплеметнации модуля ( то есть модуль не надо лишний раз в другой)
