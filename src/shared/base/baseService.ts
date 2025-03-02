@@ -4,6 +4,7 @@ import {
   FindManyOptions,
   ObjectLiteral,
   FindOptionsWhere,
+  FindOneOptions,
 } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -12,18 +13,25 @@ import { getFindOptions } from 'shared/utils/getFindOptions';
 export abstract class BaseService<T extends ObjectLiteral & { id: string }> {
   constructor(protected readonly repository: Repository<T>) {}
 
-  async findAll(query?: Partial<FindManyOptions<T>>): Promise<T[]> {
+  async findAll(
+    query?: Partial<FindManyOptions<T>> & {
+      sortBy?: keyof T;
+      searchBy?: string;
+      searchTerm?: string;
+      select?: (keyof T)[];
+      relations?: string[];
+    },
+  ): Promise<T[]> {
     const options: FindManyOptions<T> = getFindOptions<T>(query || {});
     return this.repository.find(options);
   }
 
-  async findOne(id: string): Promise<T> {
+  async findOne(idOrOptions: string | FindOptionsWhere<T>): Promise<T> {
     const entity = await this.repository.findOne({
-      where: { id } as FindOptionsWhere<T>,
-    });
-    if (!entity) {
-      throw new NotFoundException('Entity not found');
-    }
+      where:
+        typeof idOrOptions === 'string' ? { id: idOrOptions } : idOrOptions,
+    } as FindOneOptions<T>);
+    if (!entity) throw new NotFoundException('Entity not found');
     return entity;
   }
 
