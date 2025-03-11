@@ -11,4 +11,4 @@ import { userProviders } from 'modules/user/user.providers';
   providers: [...subscriptionProviders, ...userProviders, SubscriptionService],
   exports: [SubscriptionService],
 })
-export class PostModule {}
+export class SubscriptionModule {}

@@ -35,25 +35,30 @@ export class SubscriptionService extends BaseService<Subscription> {
     if (!follower || !following) throw new NotFoundException('User not found');
 
     const existingSubscription = await this.findOne({
-      where: { follower, following },
+      follower: { id: followerId },
+      following: { id: followingId },
     });
 
+    console.log(existingSubscription, 'existingSubscription');
+    // TO-DO : check why code execution does not stop after getting 409
     if (existingSubscription) throw new ConflictException('Already following');
 
-    const subscription = this.create({
-      follower,
-      following,
+    const subscription = this.repository.create({
+      follower: { id: followerId },
+      following: { id: followingId },
     });
-    await this.save(subscription);
+
+    await this.repository.save(subscription);
   }
 
   async unfollowUser(followerId: string, followingId: string): Promise<void> {
     const subscription = await this.findOne({
-      where: { follower: { id: followerId }, following: { id: followingId } },
+      follower: { id: followerId },
+      following: { id: followingId },
     });
 
     if (!subscription) throw new NotFoundException('Subscription not found');
 
-    await this.remove(subscription);
+    await this.repository.remove(subscription);
   }
 }

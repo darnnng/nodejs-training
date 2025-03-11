@@ -18,5 +18,5 @@ export class Post extends BaseEntity {
   user: User;
 
   @OneToMany(() => Files, (file) => file.post)
-  files: File[];
+  files: Files[];
 }
